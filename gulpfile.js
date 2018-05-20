@@ -8,12 +8,16 @@ var cleanCSS = require('gulp-clean-css');
 var sass = require('gulp-sass');
 var plumber = require('gulp-plumber');
 var babel = require('gulp-babel');
+var imagemin = require('gulp-imagemin');
+var del = require('del');
 
 // File paths
 var DIST_PATH = 'public/dist'
 var SCRIPTS_PATH = 'public/scripts/**/*.js';
 var CSS_PATH = 'public/css/**/*.css';
 var SASS_PATH = 'public/scss/main.scss';
+var IMAGE_PATH = 'public/images/**/*.{png,jpeg,jpg,gif,svg}';
+
 //Styles
 gulp.task('styles', function () {
 	console.log('starting styles task');
@@ -73,10 +77,20 @@ gulp.task('scripts', function () {
 
 // Images
 gulp.task('images', function () {
-	console.log('starting images task');
+	console.log('Starting images task');
+	gulp.src(IMAGE_PATH)
+			.pipe(imagemin())
+			.pipe(gulp.dest(DIST_PATH + '/images'))
 });
 
-gulp.task('default', ['images', 'sass', 'scripts'], function () {
+// clean
+gulp.task('clean', function(){
+	return del.sync([
+		DIST_PATH
+	]);
+});
+
+gulp.task('default', ['clean', 'images', 'sass', 'scripts'], function () {
 	console.log('Starting default task');
 });
 
