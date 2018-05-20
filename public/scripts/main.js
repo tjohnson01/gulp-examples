@@ -1,3 +1,16 @@
-var name = 'Chapez!';
+// Test babel 
+class Person{
+  constructor(name){
+    this.name = name;
+  }
+  
+  hello(){
+    return 'Hello ' + this.name;
+  }
+};
 
-document.write('Hello ' + name + '!');
+let name = 'Travis',
+    t = new Person('Chawawis');
+
+document.write('Hello ' + name + '!' + '<br/>');
+document.write(t.hello());

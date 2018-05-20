@@ -7,6 +7,7 @@ var autoprefixer = require('gulp-autoprefixer');
 var cleanCSS = require('gulp-clean-css');
 var sass = require('gulp-sass');
 var plumber = require('gulp-plumber');
+var babel = require('gulp-babel');
 
 // File paths
 var DIST_PATH = 'public/dist'
@@ -59,9 +60,15 @@ gulp.task('scripts', function () {
 	console.log('starting scripts task');
 
 	return gulp.src(SCRIPTS_PATH)
-		.pipe(uglify())
-		.pipe(gulp.dest(DIST_PATH))
-		.pipe(livereload());
+	.pipe(sourcemaps.init())
+	.pipe(babel({
+            presets: ['env']
+        }))
+	.pipe(uglify())
+	.pipe(concat('scripts-combined.js'))
+	.pipe(sourcemaps.write())
+	.pipe(gulp.dest(DIST_PATH))
+	.pipe(livereload());
 });
 
 // Images
@@ -69,11 +76,11 @@ gulp.task('images', function () {
 	console.log('starting images task');
 });
 
-gulp.task('default', function () {
+gulp.task('default', ['images', 'sass', 'scripts'], function () {
 	console.log('Starting default task');
 });
 
-gulp.task('watch', function () {
+gulp.task('watch', ['default'], function () {
 	console.log('Starting watch task');
 	require('./server.js');
 	livereload.listen();
